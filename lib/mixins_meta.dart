@@ -9,7 +9,7 @@ library protobuf.mixins.meta;
 /// Entry point called by dart-protoc-plugin.
 PbMixin findMixin(String name) {
   for (var m in _exportedMixins) {
-    if (m.name == name) {
+    if (m._name == name) {
       return m;
     }
   }

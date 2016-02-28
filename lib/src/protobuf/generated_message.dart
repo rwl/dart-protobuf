@@ -134,7 +134,15 @@ abstract class GeneratedMessage {
   /// Returns the JSON encoding of this message as a Dart [Map].
   ///
   /// The encoding is described in [GeneratedMessage.writeToJson].
-  Map<String, dynamic> writeToJsonMap() => _writeToJsonMap(_fieldSet);
+  Map<String, dynamic> writeToJsonMap(
+      {JsonEncoding encoding: JsonEncoding.JSONP}) {
+    switch (encoding) {
+      case JsonEncoding.JSONP:
+        return _writeToJsonMap(_fieldSet);
+      case JsonEncoding.CANONICAL:
+        return _writeToCanonicalJsonMap(_fieldSet);
+    }
+  }
 
   /// Returns a JSON string that encodes this message.
   ///
@@ -147,18 +155,27 @@ abstract class GeneratedMessage {
   /// literals; values with a 64-bit integer datatype (regardless of their
   /// actual runtime value) are represented as strings. Enumerated values are
   /// represented as their integer value.
-  String writeToJson() => JSON.encode(writeToJsonMap());
+  String writeToJson({JsonEncoding encoding: JsonEncoding.JSONP}) =>
+      JSON.encode(writeToJsonMap(encoding: encoding));
 
   /// Merges field values from [data], a JSON object, encoded as described by
   /// [GeneratedMessage.writeToJson].
   void mergeFromJson(String data,
-      [ExtensionRegistry extensionRegistry = ExtensionRegistry.EMPTY]) {
+      [ExtensionRegistry extensionRegistry = ExtensionRegistry.EMPTY,
+      JsonEncoding encoding = JsonEncoding.JSONP]) {
     /// Disable lazy creation of Dart objects for a dart2js speedup.
     /// This is a slight regression on the Dart VM.
     /// TODO(skybrian) we could skip the reviver if we're running
     /// on the Dart VM for a slight speedup.
     var jsonMap = JSON.decode(data, reviver: _emptyReviver);
-    _mergeFromJsonMap(_fieldSet, jsonMap, extensionRegistry);
+    switch (encoding) {
+      case JsonEncoding.JSONP:
+        _mergeFromJsonMap(_fieldSet, jsonMap, extensionRegistry);
+        break;
+      case JsonEncoding.CANONICAL:
+        _mergeFromCanonicalJsonMap(_fieldSet, jsonMap, extensionRegistry);
+        break;
+    }
   }
 
   static _emptyReviver(k, v) => v;
@@ -167,8 +184,16 @@ abstract class GeneratedMessage {
   ///
   /// The encoding is described in [GeneratedMessage.writeToJson].
   void mergeFromJsonMap(Map<String, dynamic> json,
-      [ExtensionRegistry extensionRegistry = ExtensionRegistry.EMPTY]) {
-    _mergeFromJsonMap(_fieldSet, json, extensionRegistry);
+      [ExtensionRegistry extensionRegistry = ExtensionRegistry.EMPTY,
+      JsonEncoding encoding = JsonEncoding.JSONP]) {
+    switch (encoding) {
+      case JsonEncoding.JSONP:
+        _mergeFromJsonMap(_fieldSet, json, extensionRegistry);
+        break;
+      case JsonEncoding.CANONICAL:
+        _mergeFromCanonicalJsonMap(_fieldSet, json, extensionRegistry);
+        break;
+    }
   }
 
   /// Adds an extension field value to a repeated field.
