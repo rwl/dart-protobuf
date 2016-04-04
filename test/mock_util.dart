@@ -9,7 +9,6 @@ import 'package:protobuf/protobuf.dart'
 
 /// A minimal protobuf implementation for testing.
 abstract class MockMessage extends GeneratedMessage {
-
   BuilderInfo _infoCache;
 
   // subclasses must provide these
