@@ -4,7 +4,7 @@
 
 library protobuf;
 
-import 'dart:async' show Future;
+import 'dart:async' show Future, Stream, StreamSink, StreamController;
 import 'dart:collection' show HashMap, ListMixin;
 import 'dart:convert' show JSON, Utf8Codec;
 import 'dart:math' as math;

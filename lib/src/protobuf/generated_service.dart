@@ -19,5 +19,14 @@ abstract class GeneratedService {
 
   /// Dispatches the call. The request object should come from [createRequest].
   Future<GeneratedMessage> handleCall(
-      ServerContext ctx, String methodName, GeneratedMessage request);
+      ServerContext ctx, String methodName, /*GeneratedMessage*/ request);
+
+//  Future<GeneratedMessage> handleClientStream(
+//      ServerContext ctx, String methodName, Stream<GeneratedMessage> request);
+//
+//  Stream<GeneratedMessage> handleServerStream(
+//      ServerContext ctx, String methodName, GeneratedMessage request);
+//
+//  Stream<GeneratedMessage> handleBidirectionalStream(
+//      ServerContext ctx, String methodName, Stream<GeneratedMessage> request);
 }

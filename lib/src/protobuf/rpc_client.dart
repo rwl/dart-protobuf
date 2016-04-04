@@ -19,13 +19,38 @@ class ClientContext {
 /// The protoc plugin generates a client-side stub for each service that
 /// takes an RpcClient as a constructor parameter.
 abstract class RpcClient {
-
   /// Sends a request to a server and returns the reply.
   ///
   /// The implementation should serialize the request as binary or JSON, as
   /// appropriate. It should merge the reply into [emptyResponse] and
   /// return it.
   Future<GeneratedMessage> invoke(
-      ClientContext ctx, String serviceName, String methodName,
-      GeneratedMessage request, GeneratedMessage emptyResponse);
+      ClientContext ctx,
+      String serviceName,
+      String methodName,
+      GeneratedMessage request,
+      GeneratedMessage emptyResponse);
+}
+
+abstract class StreamingRpcClient extends RpcClient {
+  Future<GeneratedMessage> clientStream(
+      ClientContext ctx,
+      String serviceName,
+      String methodName,
+      StreamSink<GeneratedMessage> request,
+      GeneratedMessage emptyResponse);
+
+  Stream<GeneratedMessage> serverStream(
+      ClientContext ctx,
+      String serviceName,
+      String methodName,
+      GeneratedMessage request,
+      StreamController<GeneratedMessage> emptyResponse);
+
+  Stream<GeneratedMessage> bidirectionalStream(
+      ClientContext ctx,
+      String serviceName,
+      String methodName,
+      StreamSink<GeneratedMessage> request,
+      StreamController<GeneratedMessage> emptyResponse);
 }
